@@ -30,7 +30,7 @@ export class AppState {
         return this.coffeeSvc.getAll()
             .pipe(
                 map(x => ctx.dispatch(new GetCoffeeListSuccess(x))),
-                catchError(() => ctx.dispatch(of(new GetCoffeeListFailed())))
+                catchError(() => ctx.dispatch(new GetCoffeeListFailed()))
             );
     }
 
@@ -51,6 +51,7 @@ export class AppState {
     @Action(GetCoffeeListFailed)
     getCoffeeListFailed(ctx: StateContext<App>, action: GetCoffeeListFailed) {
         const state = ctx.getState();
+        console.log('here');
 
         const current = {
             coffeeList: []

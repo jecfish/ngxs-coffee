@@ -3,8 +3,8 @@ import {
     AddToCart, RemoveCartItem, RemoveOneCartItem,
     EmptyCart, AddToCoffeeList, DummySetState, GetCoffeeList
 } from './app.actions';
-import { Store, Actions, NgxsModule, ofActionSuccessful } from '@ngxs/store';
-import { async, TestBed } from '@angular/core/testing';
+import { Store, Actions, NgxsModule, ofActionSuccessful, ofActionErrored, ofActionDispatched, ofAction } from '@ngxs/store';
+import { async, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { getAppInitialState, AppState } from './app.state';
 import { HttpClientModule } from '@angular/common/http';
 import { CoffeeService } from '../services/coffee.service';
@@ -294,45 +294,52 @@ describe('App Reducer', () => {
 
     // effects
     describe('GET_COFFEE_LIST', () => {
-        it('should return success', () => {
+        it('should return success', fakeAsync(() => {
             // arrange
             const action = new GetCoffeeList();
             const expected = new GetCoffeeListSuccess([
                 { name: 'coffee cc', price: 77, recipe: [] }
             ]);
+            const callbacksCalled = [];
 
             spyOn(service, 'getAll').and.returnValue(of([
                 { name: 'coffee cc', price: 77, recipe: [] }
             ]));
 
-            // assert
+            // action
             actions
                 .pipe(ofActionSuccessful(GetCoffeeListSuccess))
                 .subscribe(x => {
-                    expect(x).toEqual(expected);
+                    callbacksCalled.push(x);
                 });
 
-            // action
             store.dispatch(action);
-        });
+            tick(1);
 
-        it('should return throw error', () => {
+            // assert
+            expect(callbacksCalled).toEqual([expected]);
+        }));
+
+        it('should return throw error', fakeAsync(() => {
             const action = new GetCoffeeList();
             const expected = new GetCoffeeListFailed();
+            const callbacksCalled = [];
 
             spyOn(service, 'getAll').and.returnValue(throwError('err'));
 
-            // assert
+            // action
             actions
                 .pipe(ofActionSuccessful(GetCoffeeListFailed))
                 .subscribe(x => {
-                    console.log(x);
-                    expect(1).toBe(2);
-                    // expect(x).toEqual(expected);
+                    callbacksCalled.push(x);
                 });
 
-            // action
             store.dispatch(action);
-        });
+            tick(1);
+
+            // assert
+            expect(callbacksCalled).toEqual([expected]);
+
+        }));
     });
 });
