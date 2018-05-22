@@ -11,7 +11,7 @@ import { ListPageComponent, CartPageComponent } from './containers';
 import { HeaderComponent, PayComponent } from './components';
 import { SharedModule } from './modules/shared';
 
-import { AppState } from './state/app.init';
+import { AppState } from './state/app.state';
 import { HttpClientModule } from '@angular/common/http';
 
 const CONTAINERS = [ListPageComponent, CartPageComponent];

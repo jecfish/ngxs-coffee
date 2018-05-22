@@ -1,6 +1,10 @@
 import { State, StateContext, Action } from '@ngxs/store';
 import { NextRunningNo } from './remix.actions';
 
+export const getRemixInitialState = (): Remix => ({
+    runningNo: 1
+});
+
 @State<Remix>({
     name: 'remix',
     defaults: {

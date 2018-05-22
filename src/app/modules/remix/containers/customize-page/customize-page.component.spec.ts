@@ -1,14 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { StoreModule } from '@ngrx/store';
+import { NgxsModule } from '@ngxs/store';
 
 import { CustomizePageComponent } from './customize-page.component';
 
-import { remixReducer } from '../../+state/remix.reducer';
-import { remixInitialState } from '../../+state/remix.init';
 import { SharedModule } from '../../../shared';
-import { appReducer } from '../../../../state/app.reducer';
-import { appInitialState } from '../../../../state/app.init';
+import { AppState } from '../../../../state/app.state';
+import { RemixState } from '../../+state/remix.state';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('CustomizePageComponent', () => {
   let component: CustomizePageComponent;
@@ -19,11 +18,9 @@ describe('CustomizePageComponent', () => {
       imports: [
         RouterTestingModule,
         SharedModule,
-        StoreModule.forRoot(
-          { app: appReducer },
-          { initialState: { app: appInitialState } }
-        ),
-        StoreModule.forFeature('remix', remixReducer, { initialState: remixInitialState })
+        NgxsModule.forRoot([AppState]),
+        NgxsModule.forFeature([RemixState]),
+        HttpClientModule
       ],
       declarations: [ CustomizePageComponent ]
     })

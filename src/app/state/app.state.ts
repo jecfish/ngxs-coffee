@@ -8,17 +8,20 @@ import {
     AddToCart, RemoveCartItem,
     RemoveOneCartItem, EmptyCart,
     AddToCoffeeList,
-    GetCoffeeList
+    GetCoffeeList,
+    DummySetState
 } from './app.actions';
 
 import { CoffeeService } from '../services/coffee.service';
 
+export const getAppInitialState = (): App => ({
+    coffeeList: [],
+    cart: []
+});
+
 @State<App>({
     name: 'app',
-    defaults: {
-        coffeeList: [],
-        cart: []
-    }
+    defaults: getAppInitialState()
 })
 export class AppState {
     constructor(private coffeeSvc: CoffeeService) { }
@@ -134,6 +137,20 @@ export class AppState {
 
         const current = {
             coffeeList: [...state.coffeeList, ...action.payload]
+        };
+
+        ctx.setState({
+            ...state,
+            ...current
+        });
+    }
+
+    @Action(DummySetState)
+    dummySetState(ctx: StateContext<App>, action: DummySetState) {
+        const state = ctx.getState();
+
+        const current = {
+            ...action.payload
         };
 
         ctx.setState({

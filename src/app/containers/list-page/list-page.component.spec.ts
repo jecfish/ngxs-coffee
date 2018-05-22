@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
-import { StoreModule, Store } from '@ngrx/store';
+import { NgxsModule, Store } from '@ngxs/store';
 
 import { ListPageComponent } from './list-page.component';
 import { PayComponent } from '../../components/pay/pay.component';
 
-import { appReducer } from '../../state/app.reducer';
-import { appInitialState } from '../../state/app.init';
 import { SharedModule } from '../../modules/shared';
 import { GetCoffeeList, GetCoffeeListSuccess } from '../../state/app.actions';
+import { AppState } from '../../state/app.state';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('ListPageComponent', () => {
   let component: ListPageComponent;
   let fixture: ComponentFixture<ListPageComponent>;
-  let store: Store<AppState>;
+  let store: Store;
   let dispatcher;
 
   beforeEach(async(() => {
@@ -22,10 +22,8 @@ describe('ListPageComponent', () => {
       imports: [
         RouterTestingModule,
         SharedModule,
-        StoreModule.forRoot(
-          { app: appReducer },
-          { initialState: { app: appInitialState } }
-        )
+        NgxsModule.forRoot([AppState]),
+        HttpClientModule
       ],
       declarations: [ListPageComponent, PayComponent]
     })

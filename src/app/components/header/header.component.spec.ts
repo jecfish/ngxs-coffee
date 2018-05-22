@@ -1,25 +1,25 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { StoreModule, Store } from '@ngrx/store';
+import { NgxsModule, Store } from '@ngxs/store';
 
 import { HeaderComponent } from './header.component';
 
-import { appReducer } from '../../state/app.reducer';
-import { appInitialState } from '../../state/app.init';
 import { AddToCart } from '../../state/app.actions';
+import { AppState } from '../../state/app.state';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
-  let store: Store<AppState>;
+  let store: Store;
   let fixture: ComponentFixture<HeaderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        StoreModule.forRoot(
-          { app: appReducer },
-          { initialState: { app: appInitialState } }
-        )
+        NgxsModule.forRoot([
+          AppState
+        ]),
+        HttpClientModule
       ],
       declarations: [ HeaderComponent ]
     })

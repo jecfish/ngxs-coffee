@@ -1,28 +1,26 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
-import { StoreModule, Store } from '@ngrx/store';
+import { NgxsModule, Store } from '@ngxs/store';
 
 import { CartPageComponent } from './cart-page.component';
 import { PayComponent } from '../../components/pay/pay.component';
 
-import { appInitialState } from '../../state/app.init';
-import { appReducer } from '../../state/app.reducer';
 import { GetCoffeeListSuccess, AddToCart, RemoveOneCartItem, RemoveCartItem } from '../../state/app.actions';
+import { AppState } from '../../state/app.state';
+import { HttpClientModule } from '@angular/common/http';
 
 describe('CartPageComponent', () => {
   let component: CartPageComponent;
   let fixture: ComponentFixture<CartPageComponent>;
-  let store: Store<AppState>;
+  let store: Store;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        StoreModule.forRoot(
-          { app: appReducer },
-          { initialState: { app: appInitialState } }
-        )
+        NgxsModule.forRoot([AppState]),
+        HttpClientModule,
       ],
       declarations: [CartPageComponent, PayComponent]
     })

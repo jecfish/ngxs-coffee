@@ -3,6 +3,6 @@ interface Remix {
     runningNo: number;
 }
 
-interface RemixState {
+interface RemixRemix {
     readonly remix: Remix;
 }

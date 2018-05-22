@@ -5,7 +5,7 @@ import { RemixRoutingModule } from './remix-routing.module';
 import { CustomizePageComponent } from './containers';
 import { SharedModule } from '../shared';
 import { NgxsModule } from '@ngxs/store';
-import { RemixState } from './+state/remix.init';
+import { RemixState } from './+state/remix.state';
 
 const CONTAINERS = [CustomizePageComponent];
 

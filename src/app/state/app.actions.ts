@@ -43,3 +43,10 @@ export class AddToCoffeeList {
     static readonly type = 'ADD_TO_COFFEE_LIST';
     constructor(public payload: Coffee[]) { }
 }
+
+// TODO: dummy for unit testing purpose
+export class DummySetState {
+    static readonly type = 'DUMMY_SET_STATE';
+    constructor(public payload: App) { }
+}
+
