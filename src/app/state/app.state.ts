@@ -26,7 +26,7 @@ export const getAppInitialState = (): App => ({
 export class AppState {
     constructor(private coffeeSvc: CoffeeService) { }
     @Action(GetCoffeeList)
-    getCoffeeListEffect(ctx: StateContext<App>, action: GetCoffeeList) {
+    getCoffeeList$(ctx: StateContext<App>, action: GetCoffeeList) {
         return this.coffeeSvc.getAll()
             .pipe(
                 map(x => ctx.dispatch(new GetCoffeeListSuccess(x))),

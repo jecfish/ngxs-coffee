@@ -1,15 +1,20 @@
 import {
     GetCoffeeListSuccess, GetCoffeeListFailed,
     AddToCart, RemoveCartItem, RemoveOneCartItem,
-    EmptyCart, AddToCoffeeList, DummySetState
+    EmptyCart, AddToCoffeeList, DummySetState, GetCoffeeList
 } from './app.actions';
-import { Store, NgxsModule } from '@ngxs/store';
+import { Store, Actions, NgxsModule, ofActionSuccessful } from '@ngxs/store';
 import { async, TestBed } from '@angular/core/testing';
 import { getAppInitialState, AppState } from './app.state';
 import { HttpClientModule } from '@angular/common/http';
+import { CoffeeService } from '../services/coffee.service';
+import { of, throwError } from 'rxjs';
+import { hot, cold } from 'jasmine-marbles';
 
 describe('App Reducer', () => {
     let store: Store;
+    let actions: Actions;
+    let service: CoffeeService;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
@@ -20,6 +25,8 @@ describe('App Reducer', () => {
         }).compileComponents();
 
         store = TestBed.get(Store);
+        actions = TestBed.get(Actions);
+        service = TestBed.get(CoffeeService);
     }));
 
     describe('GET_COFFEE_LIST_SUCCESS', () => {
@@ -282,6 +289,50 @@ describe('App Reducer', () => {
                 // assert
                 expect(actual).toEqual(expectedState);
             });
+        });
+    });
+
+    // effects
+    describe('GET_COFFEE_LIST', () => {
+        it('should return success', () => {
+            // arrange
+            const action = new GetCoffeeList();
+            const expected = new GetCoffeeListSuccess([
+                { name: 'coffee cc', price: 77, recipe: [] }
+            ]);
+
+            spyOn(service, 'getAll').and.returnValue(of([
+                { name: 'coffee cc', price: 77, recipe: [] }
+            ]));
+
+            // assert
+            actions
+                .pipe(ofActionSuccessful(GetCoffeeListSuccess))
+                .subscribe(x => {
+                    expect(x).toEqual(expected);
+                });
+
+            // action
+            store.dispatch(action);
+        });
+
+        it('should return throw error', () => {
+            const action = new GetCoffeeList();
+            const expected = new GetCoffeeListFailed();
+
+            spyOn(service, 'getAll').and.returnValue(throwError('err'));
+
+            // assert
+            actions
+                .pipe(ofActionSuccessful(GetCoffeeListFailed))
+                .subscribe(x => {
+                    console.log(x);
+                    expect(1).toBe(2);
+                    // expect(x).toEqual(expected);
+                });
+
+            // action
+            store.dispatch(action);
         });
     });
 });
