@@ -1,0 +1,11 @@
+button.pay {
+    border: 4px solid black;
+    background: antiquewhite;
+    margin: 0 6px;
+    font-size: xx-large;
+  }
+  
+  button.pay:hover {
+    border-color: goldenrod;
+    color: goldenrod;
+  }

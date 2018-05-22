@@ -1,0 +1,22 @@
+<h2>
+  Click me and add to cart when you are ready!
+  (<span>{{ coffee.name }}</span>)
+  <!-- Make your own coffee! -->
+</h2>
+<div *ngIf="coffee">
+  <div class="coffee">
+    <app-cup [item]="coffee" (click)="addToCart(coffee)"></app-cup>
+  </div>
+  <div class="recipe">
+    <ul>
+      <li *ngFor="let item of coffee.recipe">
+        <label>{{ item.name }}</label>
+        <div>
+          <button type="button" (click)="!item.quantity || item.quantity = item.quantity - 5">-</button>
+          <span class="quantity-label">{{ item.quantity }}</span>
+          <button type="button" (click)="item.quantity >= 100 ||item.quantity = item.quantity + 5">+</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

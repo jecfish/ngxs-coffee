@@ -1,0 +1,49 @@
+h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.coffee {
+  display: flex;
+  justify-content: center;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: baseline;
+}
+
+label {
+    font-size: large;
+}
+
+.recipe {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+button {
+  border: 4px solid black;
+  background: antiquewhite;
+  margin: 0 6px;
+}
+
+button:hover {
+  border-color: goldenrod;
+  color: goldenrod;
+}
+
+.quantity-label {
+  width: 24px;
+  text-align: center;
+  display: inline-block;
+}

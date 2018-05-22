@@ -1,0 +1,32 @@
+<div class="list" *ngIf="cartList$ | async as cartList">
+  <p *ngIf="!cartList.length">No coffee, go add some.</p>
+  <div *ngIf="cartList.length">
+    <app-pay></app-pay>
+    <ul>
+      <li class="list-header">
+        <div>Item</div>
+        <div>Unit</div>
+        <div>Total</div>
+        <div></div>
+      </li>
+      <li *ngFor="let item of cartList">
+        <div>
+          {{ item.name }}
+        </div>
+        <div>
+          <span class="unit-desc">{{ item.unitPrice | currency }} x {{ item.quantity }}</span>
+          <div class="unit-controller">
+            <button type="button" (click)="addOneItem(item.name)">+</button>
+            <button type="button" (click)="removeOneItem(item.name)">-</button>
+          </div>
+        </div>
+        <div>
+          {{ item.price | currency }}
+        </div>
+        <div>
+          <button class="delete" type="button" (click)="removeItem(item.name)">x</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

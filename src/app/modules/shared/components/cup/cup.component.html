@@ -1,0 +1,8 @@
+<div class="cup">
+  <div class="cup-body">
+    <div *ngFor="let ingredient of item?.recipe" class="ingredient {{ ingredient.name }}" [style.height]="ingredient.quantity + '%'">
+      {{ ingredient.quantity ? ingredient.name : '' }}
+    </div>
+  </div>
+  <div class="cup-handler"></div>
+</div>
