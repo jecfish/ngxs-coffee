@@ -37,4 +37,5 @@ const COMPONENTS = [HeaderComponent, PayComponent];
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

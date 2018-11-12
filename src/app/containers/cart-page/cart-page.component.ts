@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { AddToCart, RemoveOneCartItem, RemoveCartItem } from '../../state/app.actions';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-cart-page',
@@ -29,7 +30,20 @@ export class CartPageComponent implements OnInit {
       map(x => x.sort((a, b) => a.name < b.name ? -1 : 1))
     );
 
-  constructor(private store: Store, private router: Router) { }
+  constructor(private store: Store, private router: Router, private title: Title,
+    private route: ActivatedRoute, private meta: Meta) {
+    title.setTitle('coffee cart | crafty');
+    meta.addTags([
+      { name: 'description', content: 'crafty cart- caffeine lover, buy a coffee now!' },
+      { name: 'twitter:card', value: 'summary' },
+      { name: 'twitter:image', content: '/assets/cart-hero.png' },
+      { property: 'og:title', content: 'coffee cart | crafty' },
+      { property: 'og:type', content: 'article' },
+      { property: 'og:url', content: location.href },
+      { property: 'og:image', content: '/assets/cart-hero.png' },
+      { property: 'og:description', content: 'crafty cart - caffeine lover, buy a coffee now!' },
+    ], false);
+  }
 
   ngOnInit() {
   }
