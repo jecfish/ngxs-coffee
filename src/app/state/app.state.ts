@@ -44,6 +44,14 @@ export class AppState {
         return sum;
     }
 
+    @Selector()
+    static totalCartQuantity(state: App) {
+        const total = state.cart
+            .reduce((acc, curr) => acc + curr.quantity, 0);
+
+        return total;
+    }
+
     @Action(GetCoffeeList)
     async getCoffeeList(ctx: StateContext<App>, action: GetCoffeeList) {
         try {
