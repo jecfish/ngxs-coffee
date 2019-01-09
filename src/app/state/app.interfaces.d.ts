@@ -4,10 +4,6 @@ interface App {
     cart: { name: string; quantity: number }[];
 }
 
-interface AppApp {
-    readonly app: App;
-}
-
 interface Coffee {
     name: string;
     price: number;
