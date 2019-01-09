@@ -23,7 +23,7 @@ export class ListPageComponent implements OnInit {
   constructor(private router: Router, private store: Store) { }
 
   ngOnInit() {
-    const isListPopulated = this.store.selectSnapshot<App>(x => x.app.coffeeList.length);
+    const isListPopulated = this.store.selectSnapshot<AppModel>(x => x.app.coffeeList.length);
     if (isListPopulated) { return; }
     this.store.dispatch(new GetCoffeeList());
 

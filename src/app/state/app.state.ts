@@ -1,15 +1,13 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 
 import {
-    AddToCart, RemoveCartItem,
-    RemoveOneCartItem, EmptyCart,
-    GetCoffeeList,
-    AddOneCartItem
+    AddToCart, RemoveCartItem, RemoveOneCartItem,
+    EmptyCart, GetCoffeeList,AddOneCartItem
 } from './app.actions';
 
 import { CoffeeService } from '../services/coffee.service';
 
-@State<App>({
+@State<AppModel>({
     name: 'app',
     defaults: {
         coffeeList: [],
@@ -20,12 +18,12 @@ export class AppState {
     constructor(private coffeeSvc: CoffeeService) { }
 
     @Selector()
-    static coffeeList(state: App) {
+    static coffeeList(state: AppModel) {
         return state.coffeeList;
     }
 
     @Selector()
-    static totalCartAmount(state: App) {
+    static totalCartAmount(state: AppModel) {
         const priceList = state.cart
             .map(c => {
                 const unitPrice = state.coffeeList.find(x => x.name === c.name).price;
@@ -37,7 +35,7 @@ export class AppState {
     }
 
     @Selector()
-    static totalCartQuantity(state: App) {
+    static totalCartQuantity(state: AppModel) {
         const total = state.cart
             .reduce((acc, curr) => acc + curr.quantity, 0);
 
@@ -45,7 +43,7 @@ export class AppState {
     }
 
     @Action(GetCoffeeList)
-    async getCoffeeList(ctx: StateContext<App>, action: GetCoffeeList) {
+    async getCoffeeList(ctx: StateContext<AppModel>) {
         const coffeeList = await this.coffeeSvc.getList();
 
         const state = ctx.getState();
@@ -57,7 +55,7 @@ export class AppState {
     }
 
     @Action([AddToCart, AddOneCartItem])
-    addToCart(ctx: StateContext<App>, action: AddToCart) {
+    addToCart(ctx: StateContext<AppModel>, action: AddToCart) {
         const state = ctx.getState();
 
         // find cart item by item name
@@ -77,7 +75,7 @@ export class AppState {
     }
 
     @Action(RemoveOneCartItem)
-    removeOneCartItem(ctx: StateContext<App>, action: RemoveOneCartItem) {
+    removeOneCartItem(ctx: StateContext<AppModel>, action: RemoveOneCartItem) {
         const state = ctx.getState();
 
         const item = state.cart.find(x => x.name === action.payload);
@@ -94,7 +92,7 @@ export class AppState {
     }
 
     @Action(RemoveCartItem)
-    removeCartItem(ctx: StateContext<App>, action: RemoveCartItem) {
+    removeCartItem(ctx: StateContext<AppModel>, action: RemoveCartItem) {
         const state = ctx.getState();
 
         const cart = [...state.cart.filter(x => x.name !== action.payload)];
@@ -106,7 +104,7 @@ export class AppState {
     }
 
     @Action(EmptyCart)
-    emptyCart(ctx: StateContext<App>, action: EmptyCart) {
+    emptyCart(ctx: StateContext<AppModel>) {
         const state = ctx.getState();
 
         const cart = [];

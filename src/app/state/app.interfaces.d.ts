@@ -1,4 +1,4 @@
-interface App {
+interface AppModel {
     // define state here
     coffeeList: Coffee[];
     cart: { name: string; quantity: number }[];
