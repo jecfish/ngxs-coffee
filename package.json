@@ -22,6 +22,7 @@
     "@angular/platform-browser": "^7.2.0",
     "@angular/platform-browser-dynamic": "^7.2.0",
     "@angular/router": "^7.2.0",
+    "@ngxs-labs/emitter": "^1.8.0",
     "@ngxs/devtools-plugin": "^3.3.2",
     "@ngxs/logger-plugin": "^3.3.2",
     "@ngxs/schematics": "^0.0.1-alpha.5",

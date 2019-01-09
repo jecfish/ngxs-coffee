@@ -1,6 +1,6 @@
-import { State, Action, StateContext } from '@ngxs/store';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 
-import { map, catchError } from 'rxjs/operators';
+import { mergeMap, catchError, take, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 import {
@@ -9,7 +9,8 @@ import {
     RemoveOneCartItem, EmptyCart,
     AddToCoffeeList,
     GetCoffeeList,
-    DummySetState
+    DummySetState,
+    AddOneCartItem
 } from './app.actions';
 
 import { CoffeeService } from '../services/coffee.service';
@@ -25,45 +26,95 @@ export const getAppInitialState = (): App => ({
 })
 export class AppState {
     constructor(private coffeeSvc: CoffeeService) { }
+
+    @Selector()
+    static coffeeList(state: App) {
+        return state.coffeeList;
+    }
+
+    @Selector()
+    static totalCartAmount(state: App) {
+        const priceList = state.cart
+            .map(c => {
+                const unitPrice = state.coffeeList.find(x => x.name === c.name).price;  
+                return unitPrice * c.quantity;
+            })
+        const sum = priceList.reduce((acc, curr) => acc + curr, 0);
+
+        return sum;
+    }
+
     @Action(GetCoffeeList)
-    getCoffeeList$(ctx: StateContext<App>, action: GetCoffeeList) {
-        return this.coffeeSvc.getAll()
-            .pipe(
-                map(x => ctx.dispatch(new GetCoffeeListSuccess(x))),
-                catchError(() => ctx.dispatch(new GetCoffeeListFailed()))
-            );
+    async getCoffeeList(ctx: StateContext<App>, action: GetCoffeeList) {
+        try {
+            const coffeeList = await this.coffeeSvc.getList();
+
+            const state = ctx.getState();
+
+            ctx.setState({
+                ...state,
+                coffeeList
+            });
+        } catch (error) {
+            ctx.dispatch(new GetCoffeeListFailed(error))
+        }
     }
 
-    @Action(GetCoffeeListSuccess)
-    getCoffeeListSuccess(ctx: StateContext<App>, action: GetCoffeeListSuccess) {
-        const state = ctx.getState();
+    // @Action(GetCoffeeList)
+    // getCoffeeList$(ctx: StateContext<App>, action: GetCoffeeList) {
+    //     return this.coffeeSvc.getAll().pipe(
+    //         tap(coffeeList => {
+    //             const state = ctx.getState();
 
-        const current = {
-            coffeeList: action.payload
-        };
+    //             ctx.setState({
+    //                 ...state,
+    //                 coffeeList
+    //             });
+    //         }),
+    //         catchError(() => ctx.dispatch(new GetCoffeeListFailed()))
+    //     )
 
-        ctx.setState({
-            ...state,
-            ...current
-        });
-    }
+    // }
 
-    @Action(GetCoffeeListFailed)
-    getCoffeeListFailed(ctx: StateContext<App>, action: GetCoffeeListFailed) {
-        const state = ctx.getState();
-        console.log('here');
+    // @Action(GetCoffeeList)
+    // getCoffeeList$(ctx: StateContext<App>, action: GetCoffeeList) {
+    //     return this.coffeeSvc.getAll()
+    //         .pipe(
+    //             mergeMap(x => ctx.dispatch(new GetCoffeeListSuccess(x))),
+    //             catchError(() => ctx.dispatch(new GetCoffeeListFailed()))
+    //         );
+    // }
 
-        const current = {
-            coffeeList: []
-        };
+    // @Action(GetCoffeeListSuccess)
+    // getCoffeeListSuccess(ctx: StateContext<App>, action: GetCoffeeListSuccess) {
+    //     const state = ctx.getState();
 
-        ctx.setState({
-            ...state,
-            ...current
-        });
-    }
+    //     const current = {
+    //         coffeeList: action.payload
+    //     };
 
-    @Action(AddToCart)
+    //     ctx.setState({
+    //         ...state,
+    //         ...current
+    //     });
+    // }
+
+    // @Action(GetCoffeeListFailed)
+    // getCoffeeListFailed(ctx: StateContext<App>, action: GetCoffeeListFailed) {
+    //     const state = ctx.getState();
+    //     console.log('here');
+
+    //     const current = {
+    //         coffeeList: []
+    //     };
+
+    //     ctx.setState({
+    //         ...state,
+    //         ...current
+    //     });
+    // }
+
+    @Action([AddToCart, AddOneCartItem])
     addToCart(ctx: StateContext<App>, action: AddToCart) {
         const state = ctx.getState();
 

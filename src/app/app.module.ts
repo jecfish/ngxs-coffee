@@ -13,6 +13,7 @@ import { SharedModule } from './modules/shared';
 
 import { AppState } from './state/app.state';
 import { HttpClientModule } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 const CONTAINERS = [ListPageComponent, CartPageComponent];
 const COMPONENTS = [HeaderComponent, PayComponent];
@@ -30,8 +31,8 @@ const COMPONENTS = [HeaderComponent, PayComponent];
     HttpClientModule,
     SharedModule,
     NgxsModule.forRoot([
-      AppState
-    ]),
+      AppState,
+    ], { developmentMode: !environment.production }),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ],
   providers: [],

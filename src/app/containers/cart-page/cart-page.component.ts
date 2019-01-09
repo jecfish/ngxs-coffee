@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
-import { AddToCart, RemoveOneCartItem, RemoveCartItem } from '../../state/app.actions';
+import { RemoveOneCartItem, RemoveCartItem, AddOneCartItem } from '../../state/app.actions';
 
 @Component({
   selector: 'app-cart-page',
@@ -35,7 +34,7 @@ export class CartPageComponent implements OnInit {
   }
 
   addOneItem(name) {
-    this.store.dispatch(new AddToCart(name));
+    this.store.dispatch(new AddOneCartItem(name));
   }
 
   removeOneItem(name) {

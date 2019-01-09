@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Store, Select } from '@ngxs/store';
 
 import { Router } from '@angular/router';
-import { take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { GetCoffeeList, AddToCart } from '../../state/app.actions';
+import { AppState } from '../../state/app.state';
 
 
 @Component({
@@ -15,7 +14,8 @@ import { GetCoffeeList, AddToCart } from '../../state/app.actions';
 })
 export class ListPageComponent implements OnInit {
 
-  @Select((state: AppApp) => state.app.coffeeList)
+  // @Select((state: App) => state.app.coffeeList)
+  @Select(AppState.coffeeList)
   list$;
 
   isFeatureRemixOn = environment.features.remix;
@@ -23,11 +23,16 @@ export class ListPageComponent implements OnInit {
   constructor(private router: Router, private store: Store) { }
 
   ngOnInit() {
-    this.store.selectOnce(x => x.app.coffeeList.length)
-      .subscribe(x => {
-        if (x) { return; }
-        this.store.dispatch(new GetCoffeeList());
-      });
+    const isListPopulated = this.store.selectSnapshot<App>(x => x.app.coffeeList.length);
+    if (isListPopulated) { return; }
+    this.store.dispatch(new GetCoffeeList());
+
+    // this.store.selectOnce(x => x.app.coffeeList.length)
+    //   .subscribe(x => {
+    //     if (x) { return; }
+    //     this.store.dispatch(new GetCoffeeList());
+    //   });
+
   }
 
   addToCart(name: string) {

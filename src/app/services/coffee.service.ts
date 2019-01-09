@@ -14,4 +14,8 @@ export class CoffeeService {
       delay(1000)
     );
   }
+
+  getList() {
+    return this.getAll().toPromise();
+  }
 }
