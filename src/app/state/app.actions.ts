@@ -18,7 +18,7 @@ export class GetCoffeeListFailed {
 /* cart */
 
 export class AddToCart {
-    static readonly type = '[Home Page] ADD_TO_CART';
+    static readonly type = '[List Page] ADD_TO_CART';
     constructor(public payload: string) { }
 }
 
