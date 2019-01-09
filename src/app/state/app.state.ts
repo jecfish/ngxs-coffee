@@ -1,15 +1,10 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
 
-import { mergeMap, catchError, take, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 import {
-    GetCoffeeListSuccess, GetCoffeeListFailed,
-    AddToCart, RemoveCartItem,
-    RemoveOneCartItem, EmptyCart,
-    AddToCoffeeList,
+    AddToCart,
     GetCoffeeList,
-    DummySetState,
     AddOneCartItem
 } from './app.actions';
 
@@ -36,7 +31,7 @@ export class AppState {
     static totalCartAmount(state: App) {
         const priceList = state.cart
             .map(c => {
-                const unitPrice = state.coffeeList.find(x => x.name === c.name).price;  
+                const unitPrice = state.coffeeList.find(x => x.name === c.name).price;
                 return unitPrice * c.quantity;
             })
         const sum = priceList.reduce((acc, curr) => acc + curr, 0);
@@ -45,77 +40,21 @@ export class AppState {
     }
 
     @Action(GetCoffeeList)
-    async getCoffeeList(ctx: StateContext<App>, action: GetCoffeeList) {
-        try {
-            const coffeeList = await this.coffeeSvc.getList();
+    async getCoffeeList(ctx: StateContext<App>, action: EmitterAction<Coffee[]>) {
 
-            const state = ctx.getState();
+        const coffeeList = await this.coffeeSvc.getList();
 
-            ctx.setState({
-                ...state,
-                coffeeList
-            });
-        } catch (error) {
-            ctx.dispatch(new GetCoffeeListFailed(error))
-        }
+        const state = ctx.getState();
+
+        ctx.setState({
+            ...state,
+            coffeeList
+        });
+
     }
 
-    // @Action(GetCoffeeList)
-    // getCoffeeList$(ctx: StateContext<App>, action: GetCoffeeList) {
-    //     return this.coffeeSvc.getAll().pipe(
-    //         tap(coffeeList => {
-    //             const state = ctx.getState();
-
-    //             ctx.setState({
-    //                 ...state,
-    //                 coffeeList
-    //             });
-    //         }),
-    //         catchError(() => ctx.dispatch(new GetCoffeeListFailed()))
-    //     )
-
-    // }
-
-    // @Action(GetCoffeeList)
-    // getCoffeeList$(ctx: StateContext<App>, action: GetCoffeeList) {
-    //     return this.coffeeSvc.getAll()
-    //         .pipe(
-    //             mergeMap(x => ctx.dispatch(new GetCoffeeListSuccess(x))),
-    //             catchError(() => ctx.dispatch(new GetCoffeeListFailed()))
-    //         );
-    // }
-
-    // @Action(GetCoffeeListSuccess)
-    // getCoffeeListSuccess(ctx: StateContext<App>, action: GetCoffeeListSuccess) {
-    //     const state = ctx.getState();
-
-    //     const current = {
-    //         coffeeList: action.payload
-    //     };
-
-    //     ctx.setState({
-    //         ...state,
-    //         ...current
-    //     });
-    // }
-
-    // @Action(GetCoffeeListFailed)
-    // getCoffeeListFailed(ctx: StateContext<App>, action: GetCoffeeListFailed) {
-    //     const state = ctx.getState();
-    //     console.log('here');
-
-    //     const current = {
-    //         coffeeList: []
-    //     };
-
-    //     ctx.setState({
-    //         ...state,
-    //         ...current
-    //     });
-    // }
-
-    @Action([AddToCart, AddOneCartItem])
-    addToCart(ctx: StateContext<App>, action: AddToCart) {
+    @Receiver()
+    static addToCart(ctx: StateContext<App>, action: EmitterAction<string>) {
         const state = ctx.getState();
 
         // find cart item by item name
@@ -136,8 +75,13 @@ export class AppState {
         });
     }
 
-    @Action(RemoveCartItem)
-    removeCartItem(ctx: StateContext<App>, action: RemoveCartItem) {
+    @Receiver()
+    static addOneCartItem(ctx: StateContext<App>, action: EmitterAction<string>) {
+        this.addToCart(ctx, action);
+    }
+
+    @Receiver()
+    static removeCartItem(ctx: StateContext<App>, action: EmitterAction<string>) {
         const state = ctx.getState();
 
         const current = {
@@ -150,8 +94,8 @@ export class AppState {
         });
     }
 
-    @Action(RemoveOneCartItem)
-    removeOneCartItem(ctx: StateContext<App>, action: RemoveOneCartItem) {
+    @Receiver()
+    static removeOneCartItem(ctx: StateContext<App>, action: EmitterAction<string>) {
         const state = ctx.getState();
 
         const item = state.cart.find(x => x.name === action.payload);
@@ -169,8 +113,8 @@ export class AppState {
         });
     }
 
-    @Action(EmptyCart)
-    emptyCart(ctx: StateContext<App>, action: EmptyCart) {
+    @Receiver()
+    static emptyCart(ctx: StateContext<App>) {
         const state = ctx.getState();
 
         const current = {
@@ -183,8 +127,8 @@ export class AppState {
         });
     }
 
-    @Action(AddToCoffeeList)
-    addToCoffeeList(ctx: StateContext<App>, action: AddToCoffeeList) {
+    @Receiver()
+    static addToCoffeeList(ctx: StateContext<App>, action: EmitterAction<Coffee[]>) {
         const state = ctx.getState();
 
         const current = {
@@ -197,8 +141,8 @@ export class AppState {
         });
     }
 
-    @Action(DummySetState)
-    dummySetState(ctx: StateContext<App>, action: DummySetState) {
+    @Receiver()
+    static dummySetState(ctx: StateContext<App>, action: EmitterAction<App>) {
         const state = ctx.getState();
 
         const current = {

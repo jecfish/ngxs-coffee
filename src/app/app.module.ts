@@ -14,6 +14,7 @@ import { SharedModule } from './modules/shared';
 import { AppState } from './state/app.state';
 import { HttpClientModule } from '@angular/common/http';
 import { environment } from '../environments/environment';
+import { NgxsEmitPluginModule } from '@ngxs-labs/emitter';
 
 const CONTAINERS = [ListPageComponent, CartPageComponent];
 const COMPONENTS = [HeaderComponent, PayComponent];
@@ -33,6 +34,7 @@ const COMPONENTS = [HeaderComponent, PayComponent];
     NgxsModule.forRoot([
       AppState,
     ], { developmentMode: !environment.production }),
+    NgxsEmitPluginModule.forRoot(),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ],
   providers: [],

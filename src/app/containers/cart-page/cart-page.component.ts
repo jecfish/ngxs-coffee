@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs/operators';
 import { RemoveOneCartItem, RemoveCartItem, AddOneCartItem } from '../../state/app.actions';
+import { Emitter, Emittable } from '@ngxs-labs/emitter';
+import { AppState } from '../../state/app.state';
 
 @Component({
   selector: 'app-cart-page',
@@ -28,21 +30,21 @@ export class CartPageComponent implements OnInit {
       map(x => x.sort((a, b) => a.name < b.name ? -1 : 1))
     );
 
+
+  @Emitter(AppState.addOneCartItem)
+  addOneItem: Emittable<string>;
+
+
+  @Emitter(AppState.removeOneCartItem)
+  removeOneItem: Emittable<string>;
+
+
+  @Emitter(AppState.removeCartItem)
+  removeItem: Emittable<string>;
+
   constructor(private store: Store, private router: Router) { }
 
   ngOnInit() {
-  }
-
-  addOneItem(name) {
-    this.store.dispatch(new AddOneCartItem(name));
-  }
-
-  removeOneItem(name) {
-    this.store.dispatch(new RemoveOneCartItem(name));
-  }
-
-  removeItem(name) {
-    this.store.dispatch(new RemoveCartItem(name));
   }
 
 }
