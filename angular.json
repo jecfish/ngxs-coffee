@@ -118,5 +118,8 @@
       }
     }
   },
-  "defaultProject": "ngxs-coffee"
+  "defaultProject": "ngxs-coffee",
+  "cli": {
+    "defaultCollection": "@ngxs/schematics"
+  }
 }
