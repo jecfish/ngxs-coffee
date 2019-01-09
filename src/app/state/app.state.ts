@@ -2,7 +2,7 @@ import { State, Action, StateContext, Selector } from '@ngxs/store';
 
 import {
     AddToCart, RemoveCartItem, RemoveOneCartItem,
-    EmptyCart, GetCoffeeList,AddOneCartItem
+    EmptyCart, GetCoffeeList, AddOneCartItem
 } from './app.actions';
 
 import { CoffeeService } from '../services/coffee.service';
@@ -17,44 +17,12 @@ import { CoffeeService } from '../services/coffee.service';
 export class AppState {
     constructor(private coffeeSvc: CoffeeService) { }
 
-    @Selector()
-    static coffeeList(state: AppModel) {
-        return state.coffeeList;
-    }
+    // demo selectors
 
-    @Selector()
-    static totalCartAmount(state: AppModel) {
-        const priceList = state.cart
-            .map(c => {
-                const unitPrice = state.coffeeList.find(x => x.name === c.name).price;
-                return unitPrice * c.quantity;
-            })
-        const sum = priceList.reduce((acc, curr) => acc + curr, 0);
+    // demo 1: getCoffeeList
 
-        return sum;
-    }
 
-    @Selector()
-    static totalCartQuantity(state: AppModel) {
-        const total = state.cart
-            .reduce((acc, curr) => acc + curr.quantity, 0);
-
-        return total;
-    }
-
-    @Action(GetCoffeeList)
-    async getCoffeeList(ctx: StateContext<AppModel>) {
-        const coffeeList = await this.coffeeSvc.getList();
-
-        const state = ctx.getState();
-
-        ctx.setState({
-            ...state,
-            coffeeList
-        });
-    }
-
-    @Action([AddToCart, AddOneCartItem])
+    // demo 2: addToCart 
     addToCart(ctx: StateContext<AppModel>, action: AddToCart) {
         const state = ctx.getState();
 

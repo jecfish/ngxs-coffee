@@ -14,8 +14,7 @@ import { AppState } from '../../state/app.state';
 })
 export class ListPageComponent implements OnInit {
 
-  // @Select((state: App) => state.app.coffeeList)
-  @Select(AppState.coffeeList)
+  // @Select(AppState.coffeeList)
   list$;
 
   isFeatureRemixOn = environment.features.remix;
@@ -26,13 +25,6 @@ export class ListPageComponent implements OnInit {
     const isListPopulated = this.store.selectSnapshot<AppModel>(x => x.app.coffeeList.length);
     if (isListPopulated) { return; }
     this.store.dispatch(new GetCoffeeList());
-
-    // this.store.selectOnce(x => x.app.coffeeList.length)
-    //   .subscribe(x => {
-    //     if (x) { return; }
-    //     this.store.dispatch(new GetCoffeeList());
-    //   });
-
   }
 
   addToCart(name: string) {

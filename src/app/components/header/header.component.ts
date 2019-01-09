@@ -10,9 +10,9 @@ import { AppState } from '../../state/app.state';
 })
 export class HeaderComponent implements OnInit {
 
-  @Select(AppState.totalCartQuantity)
+  // @Select(AppState.totalCartQuantity)
   cartCount$;
-  // cartCount$ = this.store.select(x => x.app.cart.map(item => item.quantity).reduce((acc, curr) => acc + curr, 0));
+
   isFeatureRemixOn = environment.features.remix;
 
   constructor(private store: Store) { }
