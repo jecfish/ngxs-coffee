@@ -1,9 +1,6 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { Injector } from '@angular/core';
 import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
-
-import {
-    GetCoffeeList
-} from './app.actions';
 
 import { CoffeeService } from '../services/coffee.service';
 
@@ -17,7 +14,11 @@ export const getAppInitialState = (): AppModel => ({
     defaults: getAppInitialState()
 })
 export class AppState {
-    constructor(private coffeeSvc: CoffeeService) { }
+    private static coffeeSvc: CoffeeService;
+​
+    constructor(injector: Injector) {
+        AppState.coffeeSvc = injector.get<CoffeeService>(CoffeeService);
+    }
 
     @Selector()
     static coffeeList(state: AppModel) {
@@ -36,10 +37,11 @@ export class AppState {
         return sum;
     }
 
-    @Action(GetCoffeeList)
-    async getCoffeeList(ctx: StateContext<AppModel>, action: EmitterAction<Coffee[]>) {
+    // @Action(GetCoffeeList)
+    @Receiver()
+    static async getCoffeeList(ctx: StateContext<AppModel>, action: EmitterAction<Coffee[]>) {
 
-        const coffeeList = await this.coffeeSvc.getList();
+        const coffeeList = await AppState.coffeeSvc.getList();
 
         const state = ctx.getState();
 
