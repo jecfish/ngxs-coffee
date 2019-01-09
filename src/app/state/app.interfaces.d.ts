@@ -1,11 +1,11 @@
-interface App {
+interface AppModel {
     // define state here
     coffeeList: Coffee[];
     cart: { name: string; quantity: number }[];
 }
 
 interface AppApp {
-    readonly app: App;
+    readonly app: AppModel;
 }
 
 interface Coffee {

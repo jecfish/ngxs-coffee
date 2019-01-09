@@ -5,7 +5,6 @@ import { Store } from '@ngxs/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { NextRunningNo } from '../../+state/remix.actions';
-import { AddToCoffeeList, AddToCart } from '../../../../state/app.actions';
 
 @Component({
   selector: 'app-customize-page',
@@ -57,8 +56,8 @@ export class CustomizePageComponent implements OnInit, OnDestroy {
 
   addToCart(coffee: any) {
     // actions
-    this.store.dispatch(new AddToCoffeeList([coffee]));
-    this.store.dispatch(new AddToCart(coffee.name));
+    // this.store.dispatch(new AddToCoffeeList([coffee]));
+    // this.store.dispatch(new AddToCart(coffee.name));
     this.store.dispatch(new NextRunningNo());
     // route
     this.router.navigateByUrl('/cart');

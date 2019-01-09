@@ -3,7 +3,7 @@ import { Store, Select } from '@ngxs/store';
 
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { GetCoffeeList, AddToCart } from '../../state/app.actions';
+import { GetCoffeeList } from '../../state/app.actions';
 import { AppState } from '../../state/app.state';
 import { Emittable, Emitter } from '@ngxs-labs/emitter';
 
@@ -27,7 +27,7 @@ export class ListPageComponent implements OnInit {
   constructor(private router: Router, private store: Store) { }
 
   ngOnInit() {
-    const isListPopulated = this.store.selectSnapshot<App>(x => x.app.coffeeList.length);
+    const isListPopulated = this.store.selectSnapshot<AppModel>(x => x.app.coffeeList.length);
     if (isListPopulated) { return; }
     this.store.dispatch(new GetCoffeeList());
   }

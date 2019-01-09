@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { map } from 'rxjs/operators';
-import { RemoveOneCartItem, RemoveCartItem, AddOneCartItem } from '../../state/app.actions';
 import { Emitter, Emittable } from '@ngxs-labs/emitter';
 import { AppState } from '../../state/app.state';
 
