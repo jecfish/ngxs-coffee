@@ -15,12 +15,12 @@ import { CoffeeService } from '../services/coffee.service';
     }
 })
 export class AppState {
-    constructor(private coffeeSvc: CoffeeService) { }
+    
 
     // demo selectors
 
     // demo 1: getCoffeeList
-
+    
 
     // demo 2: addToCart 
     addToCart(ctx: StateContext<AppModel>, action: AddToCart) {
